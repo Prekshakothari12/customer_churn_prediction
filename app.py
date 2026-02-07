@@ -50,6 +50,7 @@ st.markdown("""
 div.stMarkdown {
     font-size: 18px;
     color: #000000;
+    line-height: 1.6;
 }
 
 /* Buttons */
@@ -90,7 +91,9 @@ div.stMarkdown {
     }
 
     div.stMarkdown {
-        font-size: 16px;
+        font-size: 18px !important;
+        line-height: 1.5 !important;
+        padding: 0 10px;
     }
 
     label {
@@ -134,7 +137,7 @@ In this project, we built a machine learning system to predict the likelihood of
 """)
 
 # ---------------- Customer Churn Info ----------------
-with st.expander("What is Customer Churn?"):
+with st.expander("What is Customer Churn?", expanded=True):
     st.markdown("""
 Customer churn happens when a customer **stops using a company's service**.  
                 
@@ -150,7 +153,7 @@ In this system:
 """)
 
 # ---------------- Project Work Done ----------------
-with st.expander("What Has Been Done in This Project?"):
+with st.expander("What Has Been Done in This Project?", expanded=True):
     st.markdown("""
 - Explored the telecom dataset to understand customer details, churn patterns, and missing values.  
 - Cleaned data by removing irrelevant columns and converting categorical features into numerical values.  
@@ -167,7 +170,7 @@ with st.expander("What Has Been Done in This Project?"):
 st.markdown("<div class='section'>Customer Information</div>", unsafe_allow_html=True)
 st.markdown("Provide the customer details below to predict the likelihood of churn.")
 
-# ---------------- User Inputs with proper explanation in brackets ----------------
+# ---------------- User Inputs ----------------
 gender = st.selectbox("Gender (Male or Female)", ["Male", "Female"])
 contract = st.selectbox("Contract Type (Type of subscription plan: Month-to-month / One year / Two year)", ["Month-to-month", "One year", "Two year"])
 tenure = st.slider("Tenure (Number of months the customer has stayed with the company)", 0, 72, 6)
@@ -227,4 +230,5 @@ if st.button("Predict Churn"):
             f"Low Risk of Customer Churn\n\n"
             f"No-Churn Probability: {probability[0][0]*100:.2f}%"
         )
+
 
