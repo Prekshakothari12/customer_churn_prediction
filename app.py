@@ -11,6 +11,8 @@ st.set_page_config(
 # ---------------- CSS Styling ----------------
 st.markdown("""
 <style>
+
+/* App background */
 .stApp {
     background: linear-gradient(135deg, #eef3f9, #ffffff);
     font-family: 'Segoe UI', sans-serif;
@@ -19,58 +21,93 @@ st.markdown("""
 /* Title */
 .title {
     text-align: center;
-    font-size: 48px;  
+    font-size: 42px;
     font-weight: 700;
     color: #0d47a1;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 /* Subtitle */
 .subtitle {
     text-align: center;
-    font-size: 24px;  /* Increased font size */
-    color: #555555;
-    margin-bottom: 35px;
+    font-size: 20px;
+    color: #333333;
+    margin-bottom: 30px;
 }
 
 /* Section headers */
 .section {
-    font-size: 32px;  /* Increased font size */
+    font-size: 26px;
     font-weight: 700;
     color: #1f4e79;
-    margin-top: 35px;
-    margin-bottom: 20px;
-    border-bottom: 3px solid #0d47a1;
-    padding-bottom: 8px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #0d47a1;
+    padding-bottom: 6px;
+}
+
+/* Markdown text */
+div.stMarkdown {
+    font-size: 18px;
+    color: #000000;
 }
 
 /* Buttons */
 .stButton>button {
     background-color: #0d47a1;
     color: white;
-    font-size: 27px;  /* Increased font size */
-    padding: 12px 26px;
-    border-radius: 10px;
+    font-size: 20px;
+    padding: 12px 24px;
+    border-radius: 8px;
     border: none;
-    font-weight: 700;
+    font-weight: 600;
+    width: 100%;
 }
+
 .stButton>button:hover {
     background-color: #08306b;
 }
 
-/* Alert text */
+/* Alerts */
 .stAlert {
-    font-size: 27px; /* Increased font size */
+    font-size: 18px;
     font-weight: 600;
 }
 
-/* General markdown text */
-div.stMarkdown {
-    font-size: 25px;  /* Increased for readability */
+/* ---------------- MOBILE FIX ---------------- */
+@media (max-width: 768px) {
+
+    .title {
+        font-size: 30px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .section {
+        font-size: 22px;
+    }
+
+    div.stMarkdown {
+        font-size: 16px;
+    }
+
+    label {
+        font-size: 16px !important;
+        color: #000000 !important;
+        font-weight: 600;
+    }
+
+    input, select, textarea {
+        font-size: 16px !important;
+        color: #000000 !important;
+        background-color: #ffffff !important;
+    }
 }
+
 </style>
 """, unsafe_allow_html=True)
-
 
 # ---------------- Load Model & Encoders ----------------
 with open("customer_churn_model.pkl", "rb") as f:
@@ -190,3 +227,4 @@ if st.button("Predict Churn"):
             f"Low Risk of Customer Churn\n\n"
             f"No-Churn Probability: {probability[0][0]*100:.2f}%"
         )
+
