@@ -168,10 +168,10 @@ with st.expander("What Has Been Done in This Project?"):
     st.markdown("""
 • Cleaned and preprocessed the telecom dataset, encoding categorical features using **pandas** and **scikit-learn**  
 • Analyzed customer patterns and churn trends with **matplotlib** and **seaborn**  
-• Handled class imbalance using **SMOTE** (**imblearn**) and trained models like **Random Forest**, **XGBoost**, and **Decision Tree**  
+• Handled class imbalance using **SMOTE** (**imblearn**)  
+• Trained and compared multiple models (**Decision Tree, Random Forest, XGBoost**), selecting **Random Forest** for its highest accuracy  
 • Built an interactive **Streamlit** app for real-time churn prediction  
 • Validated model performance using **scikit-learn** metrics, enabling data-driven business decisions
-
 """)
 
 # ---------------- Input Section ----------------
@@ -238,3 +238,4 @@ if st.button("Predict Churn"):
             f"Low Risk of Customer Churn\n\n"
             f"No-Churn Probability: {probability[0][0]*100:.2f}%"
         )
+
