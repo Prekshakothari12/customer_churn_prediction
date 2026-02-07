@@ -1,0 +1,1 @@
+X_train_smote,y_train_smote=smote.fit_resample(X_train,y_train)

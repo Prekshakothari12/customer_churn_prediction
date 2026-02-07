@@ -1,0 +1,192 @@
+import streamlit as st
+import pandas as pd
+import pickle
+
+# ---------------- Page Config ----------------
+st.set_page_config(
+    page_title="Customer Churn Prediction",
+    layout="centered"
+)
+
+# ---------------- CSS Styling ----------------
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(135deg, #eef3f9, #ffffff);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Title */
+.title {
+    text-align: center;
+    font-size: 48px;  
+    font-weight: 700;
+    color: #0d47a1;
+    margin-bottom: 12px;
+}
+
+/* Subtitle */
+.subtitle {
+    text-align: center;
+    font-size: 24px;  /* Increased font size */
+    color: #555555;
+    margin-bottom: 35px;
+}
+
+/* Section headers */
+.section {
+    font-size: 32px;  /* Increased font size */
+    font-weight: 700;
+    color: #1f4e79;
+    margin-top: 35px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #0d47a1;
+    padding-bottom: 8px;
+}
+
+/* Buttons */
+.stButton>button {
+    background-color: #0d47a1;
+    color: white;
+    font-size: 27px;  /* Increased font size */
+    padding: 12px 26px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+}
+.stButton>button:hover {
+    background-color: #08306b;
+}
+
+/* Alert text */
+.stAlert {
+    font-size: 27px; /* Increased font size */
+    font-weight: 600;
+}
+
+/* General markdown text */
+div.stMarkdown {
+    font-size: 25px;  /* Increased for readability */
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+# ---------------- Load Model & Encoders ----------------
+with open("customer_churn_model.pkl", "rb") as f:
+    model_data = pickle.load(f)
+    model = model_data["model"]
+    feature_names = model_data["features_names"]
+
+with open("encoders.pkl", "rb") as f:
+    encoders = pickle.load(f)
+
+# ---------------- Title ----------------
+st.markdown("<div class='title'>Customer Churn Prediction</div>", unsafe_allow_html=True)
+st.markdown(
+    "<div class='subtitle'>Predict the likelihood of a customer leaving a telecom service</div>",
+    unsafe_allow_html=True
+)
+
+# ---------------- About Application ----------------
+st.markdown("<div class='section'>About This Application</div>", unsafe_allow_html=True)
+st.markdown("""
+Customer churn happens when a customer stops using a company's service. In telecom, this may occur due to high monthly charges, poor support, or better offers from competitors. Predicting churn helps companies retain customers and reduce revenue loss.  
+
+In this project, we built a machine learning system to predict the likelihood of a customer leaving a telecom service. The dataset was cleaned and preprocessed, class imbalance handled, models trained, and a Streamlit app created for real-time churn predictions.
+""")
+
+# ---------------- Customer Churn Info ----------------
+with st.expander("What is Customer Churn?"):
+    st.markdown("""
+Customer churn happens when a customer **stops using a company's service**.  
+                
+In telecom, customers may leave due to: 
+- Short-term or flexible contracts  
+- High monthly charges or hidden fees  
+- Poor service quality or customer support  
+- Better offers from other providers  
+                
+In this system:  
+- **Churn = 1** → Customer is likely to leave (high risk)  
+- **Churn = 0** → Customer is likely to stay (low risk)  
+""")
+
+# ---------------- Project Work Done ----------------
+with st.expander("What Has Been Done in This Project?"):
+    st.markdown("""
+- Explored the telecom dataset to understand customer details, churn patterns, and missing values.  
+- Cleaned data by removing irrelevant columns and converting categorical features into numerical values.  
+- Visualized key features to find patterns and insights using charts and plots.  
+- Handled class imbalance using SMOTE to ensure the model learns fairly.  
+- Trained multiple models: Decision Tree, Random Forest, and XGBoost.  
+- Selected Random Forest as the best-performing model.  
+- Validated predictions on test data using accuracy, confusion matrix, and probability scores.  
+- Built a Streamlit app for user-friendly input of customer details and real-time churn prediction.  
+- Helped businesses identify at-risk customers early and take proactive retention actions.
+""")
+
+# ---------------- Input Section ----------------
+st.markdown("<div class='section'>Customer Information</div>", unsafe_allow_html=True)
+st.markdown("Provide the customer details below to predict the likelihood of churn.")
+
+# ---------------- User Inputs with proper explanation in brackets ----------------
+gender = st.selectbox("Gender (Male or Female)", ["Male", "Female"])
+contract = st.selectbox("Contract Type (Type of subscription plan: Month-to-month / One year / Two year)", ["Month-to-month", "One year", "Two year"])
+tenure = st.slider("Tenure (Number of months the customer has stayed with the company)", 0, 72, 6)
+monthly_charges = st.number_input("Monthly Charges (Amount the customer pays per month)", 0.0, 200.0, 70.0)
+internet = st.selectbox("Internet Service (Type of internet service used: DSL / Fiber optic / No)", ["DSL", "Fiber optic", "No"])
+payment = st.selectbox(
+    "Payment Method (How the customer pays the bill)", 
+    ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"]
+)
+
+# ---------------- Prepare Data ----------------
+input_data = {
+    "gender": gender,
+    "SeniorCitizen": 0,
+    "Partner": "No",
+    "Dependents": "No",
+    "tenure": tenure,
+    "PhoneService": "Yes",
+    "MultipleLines": "No",
+    "InternetService": internet,
+    "OnlineSecurity": "No",
+    "OnlineBackup": "No",
+    "DeviceProtection": "No",
+    "TechSupport": "No",
+    "StreamingTV": "No",
+    "StreamingMovies": "No",
+    "Contract": contract,
+    "PaperlessBilling": "Yes",
+    "PaymentMethod": payment,
+    "MonthlyCharges": monthly_charges,
+    "TotalCharges": tenure * monthly_charges
+}
+
+input_df = pd.DataFrame([input_data])
+
+# Encode categorical features
+for col, encoder in encoders.items():
+    input_df[col] = encoder.transform(input_df[col])
+
+input_df = input_df[feature_names]
+
+# ---------------- Prediction ----------------
+st.markdown("<div class='section'>Prediction Result</div>", unsafe_allow_html=True)
+st.markdown("Click the **Predict Churn** button to see if the customer is at risk of leaving.")
+
+if st.button("Predict Churn"):
+    prediction = model.predict(input_df)[0]
+    probability = model.predict_proba(input_df)
+
+    if prediction == 1:
+        st.error(
+            f"High Risk of Customer Churn\n\n"
+            f"Churn Probability: {probability[0][1]*100:.2f}%"
+        )
+    else:
+        st.success(
+            f"Low Risk of Customer Churn\n\n"
+            f"No-Churn Probability: {probability[0][0]*100:.2f}%"
+        )
