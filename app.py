@@ -75,7 +75,7 @@ div.stMarkdown {
     font-weight: 600;
 }
 
-/* ---------------- MOBILE FIX ---------------- */
+/* Expander headers and content on mobile */
 @media (max-width: 768px) {
 
     .title {
@@ -91,9 +91,20 @@ div.stMarkdown {
     }
 
     div.stMarkdown {
-        font-size: 18px !important;
+        font-size: 16px !important;
         line-height: 1.5 !important;
         padding: 0 10px;
+    }
+
+    .stExpander {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        margin-bottom: 5px !important;
+    }
+
+    .stExpander div.stMarkdown {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
     }
 
     label {
@@ -137,7 +148,7 @@ In this project, we built a machine learning system to predict the likelihood of
 """)
 
 # ---------------- Customer Churn Info ----------------
-with st.expander("What is Customer Churn?", expanded=True):
+with st.expander("What is Customer Churn?"):
     st.markdown("""
 Customer churn happens when a customer **stops using a company's service**.  
                 
@@ -153,17 +164,14 @@ In this system:
 """)
 
 # ---------------- Project Work Done ----------------
-with st.expander("What Has Been Done in This Project?", expanded=True):
+with st.expander("What Has Been Done in This Project?"):
     st.markdown("""
-- Explored the telecom dataset to understand customer details, churn patterns, and missing values.  
-- Cleaned data by removing irrelevant columns and converting categorical features into numerical values.  
-- Visualized key features to find patterns and insights using charts and plots.  
-- Handled class imbalance using SMOTE to ensure the model learns fairly.  
-- Trained multiple models: Decision Tree, Random Forest, and XGBoost.  
-- Selected Random Forest as the best-performing model.  
-- Validated predictions on test data using accuracy, confusion matrix, and probability scores.  
-- Built a Streamlit app for user-friendly input of customer details and real-time churn prediction.  
-- Helped businesses identify at-risk customers early and take proactive retention actions.
+• Cleaned and preprocessed the telecom dataset, encoding categorical features using **pandas** and **scikit-learn**  
+• Analyzed customer patterns and churn trends with **matplotlib** and **seaborn**  
+• Handled class imbalance using **SMOTE** (**imblearn**) and trained models like **Random Forest**, **XGBoost**, and **Decision Tree**  
+• Built an interactive **Streamlit** app for real-time churn prediction  
+• Validated model performance using **scikit-learn** metrics, enabling data-driven business decisions
+
 """)
 
 # ---------------- Input Section ----------------
@@ -172,10 +180,10 @@ st.markdown("Provide the customer details below to predict the likelihood of chu
 
 # ---------------- User Inputs ----------------
 gender = st.selectbox("Gender (Male or Female)", ["Male", "Female"])
-contract = st.selectbox("Contract Type (Type of subscription plan: Month-to-month / One year / Two year)", ["Month-to-month", "One year", "Two year"])
-tenure = st.slider("Tenure (Number of months the customer has stayed with the company)", 0, 72, 6)
-monthly_charges = st.number_input("Monthly Charges (Amount the customer pays per month)", 0.0, 200.0, 70.0)
-internet = st.selectbox("Internet Service (Type of internet service used: DSL / Fiber optic / No)", ["DSL", "Fiber optic", "No"])
+contract = st.selectbox("Contract Type (Month-to-month / One year / Two year)", ["Month-to-month", "One year", "Two year"])
+tenure = st.slider("Tenure (Number of months with the company)", 0, 72, 6)
+monthly_charges = st.number_input("Monthly Charges (Amount customer pays per month)", 0.0, 200.0, 70.0)
+internet = st.selectbox("Internet Service (DSL / Fiber optic / No)", ["DSL", "Fiber optic", "No"])
 payment = st.selectbox(
     "Payment Method (How the customer pays the bill)", 
     ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"]
@@ -230,5 +238,3 @@ if st.button("Predict Churn"):
             f"Low Risk of Customer Churn\n\n"
             f"No-Churn Probability: {probability[0][0]*100:.2f}%"
         )
-
-
