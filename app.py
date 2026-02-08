@@ -180,10 +180,10 @@ st.markdown("Provide the customer details below to predict the likelihood of chu
 
 # ---------------- User Inputs ----------------
 gender = st.selectbox("Gender (Male or Female)", ["Male", "Female"])
-contract = st.selectbox("Contract Type (Month-to-month / One year / Two year)", ["Month-to-month", "One year", "Two year"])
+contract = st.selectbox("Contract Type (Duration of customer agreement- Month-to-month / One year / Two year)", ["Month-to-month", "One year", "Two year"])
 tenure = st.slider("Tenure (Number of months with the company)", 0, 72, 6)
 monthly_charges = st.number_input("Monthly Charges (Amount customer pays per month)", 0.0, 200.0, 70.0)
-internet = st.selectbox("Internet Service (DSL / Fiber optic / No)", ["DSL", "Fiber optic", "No"])
+internet = st.selectbox("Type of internet connection (DSL / Fiber optic / No)", ["DSL", "Fiber optic", "No"])
 payment = st.selectbox(
     "Payment Method (How the customer pays the bill)", 
     ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"]
@@ -238,4 +238,5 @@ if st.button("Predict Churn"):
             f"Low Risk of Customer Churn\n\n"
             f"No-Churn Probability: {probability[0][0]*100:.2f}%"
         )
+
 
