@@ -10,6 +10,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier  
 from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn.metrics import precision_score, recall_score, roc_auc_score, roc_curve
 import pickle
 
 #data loading and understanding
@@ -199,9 +200,13 @@ print(y_test.value_counts())
 #6. model evaluation
 #evaluate on test data
 y_test_pred=rfc.predict(X_test)
+y_test_prob = rfc.predict_proba(X_test)[:, 1]
 print("accuracy score:\n",accuracy_score(y_test,y_test_pred))
 print("confusion matrix:\n",confusion_matrix(y_test,y_test_pred))
 print("Classification report:\n",classification_report(y_test,y_test_pred))
+roc_auc = roc_auc_score(y_test, y_test_prob)
+print(f"ROC-AUC  : {roc_auc:.2f}")
+
 
 #save the train model as a pickel file
 model_data={"model":rfc,"features_names":x.columns.tolist()} #x is the all the features except churn (we drop churn)
